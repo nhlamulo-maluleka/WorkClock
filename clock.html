@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Work hours Clock Project</title>
+    <meta name="author" content="Nhlamulo Maluleka" />
+    <meta name="framework" content="Nicroni 2.0" />
+    <meta name="repository" content="https://github.com/u15231748/Nicroni-2.0" />
+    <script type="module" src="https://nicroni.herokuapp.com/nicroni/cdn/nicroni.js" crossorigin="anonymous"
+        defer></script>
+</head>
+
+<body class="h-99vh center bg-color-rgb(25,62,48)">
+    <div class="h-(max-content) w-(max-content) p-5rem bg-color-#000 br-20px border-(5px,double,red) 
+                w-children-(max-content) fw-children-bold fs-children-30pt bg-color-children-#fff 
+                br-children-10px p-children-1rem m-children-auto border-children-(2px,solid,#fff)">
+        <div class="ff-children-arial">
+            <span class="center fs-9pt bg-color-#000 color-yellow 
+                        br-10px w-(max-content) p-2px mb-5px">Current Time</span>
+            <div class="center">
+                <span id="hr">00</span>:<span id="min">00</span>:<span id="sec">00</span>
+            </div>
+        </div>
+        <div class="ff-children-arial mb-2rem mt-2rem">
+            <span class="center fs-9pt bg-color-#000 color-yellow 
+            br-10px w-(max-content) p-2px mb-5px">Till Lunch</span>
+            <div class="center">
+                <span id="lunch_hr">00</span>:<span id="lunch_min">00</span>:<span id="lunch_sec">00</span>
+            </div>
+        </div>
+        <div class="ff-children-arial">
+            <span class="center fs-9pt bg-color-#000 color-yellow 
+            br-10px w-(max-content) p-2px mb-5px">Till Knock-Off</span>
+            <div class="center">
+                <span id="off_hr">00</span>:<span id="off_min">00</span>:<span id="off_sec">00</span>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Encapsulating my objects in a closure
+    const updateCurrentTime = () => {
+        // STANDARD TIME
+        const hours = document.getElementById("hr");
+        const minutes = document.getElementById("min");
+        const seconds = document.getElementById("sec");
+        // LUNCH TIME
+        const lunch_hours = document.getElementById("lunch_hr");
+        const lunch_minutes = document.getElementById("lunch_min");
+        const lunch_seconds = document.getElementById("lunch_sec");
+        // KNOCK-OFF TIME
+        const off_hours = document.getElementById("off_hr");
+        const off_minutes = document.getElementById("off_min");
+        const off_seconds = document.getElementById("off_sec");
+
+        // Setting datatime for lunch + knockoff
+        const dtObject = new Date();
+        const lunch = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), 12, 00, 00)
+        const knockOff = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), 16, 00, 00)
+
+        return () => {
+            const untillunch = new Date();
+            // Till Lunch
+            untillunch.setHours(lunch.getHours() - untillunch.getHours());
+            untillunch.setMinutes(lunch.getMinutes() - untillunch.getMinutes());
+            untillunch.setSeconds(lunch.getSeconds() - untillunch.getSeconds());
+            // SET LUNCH TIME
+            lunch_hours.innerText = untillunch.getHours() < 10 ? `0${untillunch.getHours()}` : untillunch.getHours();
+            lunch_minutes.innerText = untillunch.getMinutes() < 10 ? `0${untillunch.getMinutes()}` : untillunch.getMinutes();
+            lunch_seconds.innerText = untillunch.getSeconds() < 10 ? `0${untillunch.getSeconds()}` : untillunch.getSeconds();
+
+            // Till Knock-Off
+            const untilKnockOff = new Date();
+            untilKnockOff.setHours(knockOff.getHours() - untilKnockOff.getHours());
+            untilKnockOff.setMinutes(knockOff.getMinutes() - untilKnockOff.getMinutes());
+            untilKnockOff.setSeconds(knockOff.getSeconds() - untilKnockOff.getSeconds());
+            // SET KNOCK-OFF VALUES
+            off_hours.innerText = untilKnockOff.getHours() < 10 ? `0${untilKnockOff.getHours()}` : untilKnockOff.getHours();
+            off_minutes.innerText = untilKnockOff.getMinutes() < 10 ? `0${untilKnockOff.getMinutes()}` : untilKnockOff.getMinutes();
+            off_seconds.innerText = untilKnockOff.getSeconds() < 10 ? `0${untilKnockOff.getSeconds()}` : untilKnockOff.getSeconds();
+
+            // SET STANDARD VALUES
+            const dt = new Date();
+            hours.innerText = dt.getHours() < 10 ? `0${dt.getHours()}` : dt.getHours();
+            minutes.innerText = dt.getMinutes() < 10 ? `0${dt.getMinutes()}` : dt.getMinutes();
+            seconds.innerText = dt.getSeconds() < 10 ? `0${dt.getSeconds()}` : dt.getSeconds();
+        }
+    }
+
+    // Instantiating my time-update function
+    const currentTime = updateCurrentTime();
+
+    // Updating my time after every second
+    setInterval(() => currentTime(), 1000)
+</script>
+
+</html>
