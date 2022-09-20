@@ -60,24 +60,29 @@
 
         return () => {
             const untillunch = new Date();
-            // Till Lunch
-            untillunch.setHours(lunch.getHours() - untillunch.getHours());
-            untillunch.setMinutes(lunch.getMinutes() - untillunch.getMinutes());
-            untillunch.setSeconds(lunch.getSeconds() - untillunch.getSeconds());
-            // SET LUNCH TIME
-            lunch_hours.innerText = untillunch.getHours() < 10 ? `0${untillunch.getHours()}` : untillunch.getHours();
-            lunch_minutes.innerText = untillunch.getMinutes() < 10 ? `0${untillunch.getMinutes()}` : untillunch.getMinutes();
-            lunch_seconds.innerText = untillunch.getSeconds() < 10 ? `0${untillunch.getSeconds()}` : untillunch.getSeconds();
+            if(untillunch < lunch){
+                // Till Lunch
+                untillunch.setHours(lunch.getHours() - untillunch.getHours());
+                untillunch.setMinutes(lunch.getMinutes() - untillunch.getMinutes());
+                untillunch.setSeconds(lunch.getSeconds() - untillunch.getSeconds());
+                
+                // SET LUNCH TIME
+                lunch_hours.innerText = untillunch.getHours() < 10 ? `0${untillunch.getHours()}` : untillunch.getHours();
+                lunch_minutes.innerText = untillunch.getMinutes() < 10 ? `0${untillunch.getMinutes()}` : untillunch.getMinutes();
+                lunch_seconds.innerText = untillunch.getSeconds() < 10 ? `0${untillunch.getSeconds()}` : untillunch.getSeconds();
+            } 
 
             // Till Knock-Off
             const untilKnockOff = new Date();
-            untilKnockOff.setHours(knockOff.getHours() - untilKnockOff.getHours());
-            untilKnockOff.setMinutes(knockOff.getMinutes() - untilKnockOff.getMinutes());
-            untilKnockOff.setSeconds(knockOff.getSeconds() - untilKnockOff.getSeconds());
-            // SET KNOCK-OFF VALUES
-            off_hours.innerText = untilKnockOff.getHours() < 10 ? `0${untilKnockOff.getHours()}` : untilKnockOff.getHours();
-            off_minutes.innerText = untilKnockOff.getMinutes() < 10 ? `0${untilKnockOff.getMinutes()}` : untilKnockOff.getMinutes();
-            off_seconds.innerText = untilKnockOff.getSeconds() < 10 ? `0${untilKnockOff.getSeconds()}` : untilKnockOff.getSeconds();
+            if(untilKnockOff < knockOff){
+                untilKnockOff.setHours(knockOff.getHours() - untilKnockOff.getHours());
+                untilKnockOff.setMinutes(knockOff.getMinutes() - untilKnockOff.getMinutes());
+                untilKnockOff.setSeconds(knockOff.getSeconds() - untilKnockOff.getSeconds());
+                // SET KNOCK-OFF VALUES
+                off_hours.innerText = untilKnockOff.getHours() < 10 ? `0${untilKnockOff.getHours()}` : untilKnockOff.getHours();
+                off_minutes.innerText = untilKnockOff.getMinutes() < 10 ? `0${untilKnockOff.getMinutes()}` : untilKnockOff.getMinutes();
+                off_seconds.innerText = untilKnockOff.getSeconds() < 10 ? `0${untilKnockOff.getSeconds()}` : untilKnockOff.getSeconds();
+            }
 
             // SET STANDARD VALUES
             const dt = new Date();
