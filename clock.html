@@ -6,31 +6,53 @@
     <meta name="author" content="Nhlamulo Maluleka" />
     <meta name="framework" content="Nicroni 2.0" />
     <meta name="repository" content="https://github.com/u15231748/Nicroni-2.0" />
-    <script type="module" src="https://nicroni.herokuapp.com/nicroni/cdn/nicroni.js" crossorigin="anonymous"
-        defer></script>
+    <script type="module" src="https://nicroni.herokuapp.com/nicroni/cdn/nicroni.js" crossorigin="anonymous" defer></script>
+    <style>
+        *{
+            overflow: hidden;
+        }
+    </style>
 </head>
 
-<body class="h-99vh center bg-color-rgb(25,62,48)">
-    <div class="h-(max-content) w-(max-content) p-5rem bg-color-#000 br-20px border-(5px,double,red) 
-                w-children-(max-content) fw-children-bold fs-children-30pt bg-color-children-#fff 
-                br-children-10px p-children-1rem m-children-auto border-children-(2px,solid,#fff)">
+<body class="pl-2rem pr-2rem bg-color-rgb(25,62,48)">
+    <div class="color-orange center">
+        <h1 class="ff-impact">WORK SCHEDULE</h1>
+    </div>
+    <div class="center gap-2rem">
+        <div class="d-flex gap-2rem gap-children-.5rem">
+            <div>
+                <label class="color-#fff ff-calibri fs-13pt">Lunch</label>
+                <input type="time" id="lunch" value="12:00" class="br-5px fs-12pt"/>
+            </div>
+            <div>
+                <label class="color-#fff ff-calibri fs-13pt">Knock-Off</label>
+                <input type="time" id="off" value="16:00" class="br-5px fs-12pt"/>
+            </div>
+        </div>
+        <div>
+            <button>Start</button>
+        </div>
+    </div>
+    <div class="bg-color-#4682B4 br-10px border-(5px,groove,orange) d-flex grid-template-column-(1fr,1fr,1fr) mt-4rem 
+                w-children-(max-content) fw-children-bold fs-children-30pt bg-color-children-#4a646c 
+                br-children-10px p-children-.5rem m-children-auto border-children-(2px,solid,#fff)">
         <div class="ff-children-arial">
             <span class="center fs-9pt bg-color-#000 color-yellow 
-                        br-10px w-(max-content) p-2px mb-5px">Current Time</span>
-            <div class="center">
+                        br-10px w-(max-content) p-2px mb-.5rem ff-calibri">Current Time</span>
+            <div class="center color-children-cream">
                 <span id="hr">00</span>:<span id="min">00</span>:<span id="sec">00</span>
             </div>
         </div>
         <div class="ff-children-arial mb-2rem mt-2rem">
             <span class="center fs-9pt bg-color-#000 color-yellow 
-            br-10px w-(max-content) p-2px mb-5px">Till Lunch</span>
+            br-10px w-(max-content) p-2px mb-.5rem ff-calibri">Till Lunch</span>
             <div class="center">
                 <span id="lunch_hr">00</span>:<span id="lunch_min">00</span>:<span id="lunch_sec">00</span>
             </div>
         </div>
         <div class="ff-children-arial">
             <span class="center fs-9pt bg-color-#000 color-yellow 
-            br-10px w-(max-content) p-2px mb-5px">Till Knock-Off</span>
+            br-10px w-(max-content) p-2px mb-.5rem ff-calibri">Till Knock-Off</span>
             <div class="center">
                 <span id="off_hr">00</span>:<span id="off_min">00</span>:<span id="off_sec">00</span>
             </div>
@@ -60,7 +82,7 @@
 
         return () => {
             const untillunch = new Date();
-            if(untillunch < lunch){
+            if(untillunch <= lunch){
                 // Till Lunch
                 untillunch.setHours(lunch.getHours() - untillunch.getHours());
                 untillunch.setMinutes(lunch.getMinutes() - untillunch.getMinutes());
@@ -74,7 +96,7 @@
 
             // Till Knock-Off
             const untilKnockOff = new Date();
-            if(untilKnockOff < knockOff){
+            if(untilKnockOff <= knockOff){
                 untilKnockOff.setHours(knockOff.getHours() - untilKnockOff.getHours());
                 untilKnockOff.setMinutes(knockOff.getMinutes() - untilKnockOff.getMinutes());
                 untilKnockOff.setSeconds(knockOff.getSeconds() - untilKnockOff.getSeconds());
