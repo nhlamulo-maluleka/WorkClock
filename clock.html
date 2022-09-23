@@ -6,9 +6,10 @@
     <meta name="author" content="Nhlamulo Maluleka" />
     <meta name="framework" content="Nicroni 2.0" />
     <meta name="repository" content="https://github.com/u15231748/Nicroni-2.0" />
-    <script type="module" src="https://nicroni.herokuapp.com/nicroni/cdn/nicroni.js" crossorigin="anonymous" defer></script>
+    <script type="module" src="https://nicroni.herokuapp.com/nicroni/cdn/nicroni.js" crossorigin="anonymous"
+        defer></script>
     <style>
-        *{
+        * {
             overflow: hidden;
         }
     </style>
@@ -16,21 +17,18 @@
 
 <body class="pl-2rem pr-2rem bg-color-rgb(25,62,48)">
     <div class="color-orange center">
-        <h1 class="ff-impact">WORK SCHEDULE</h1>
+        <h1 class="ff-impact">WORK LIFE</h1>
     </div>
     <div class="center gap-2rem">
         <div class="d-flex gap-2rem gap-children-.5rem">
             <div>
-                <label class="color-#fff ff-calibri fs-13pt">Lunch</label>
-                <input type="time" id="lunch" value="12:00" class="br-5px fs-12pt"/>
+                <label class="color-#fff ff-calibri fs-13pt">Lunch Time</label>
+                <input type="time" id="lunch" value="12:00" class="br-5px fs-12pt" />
             </div>
             <div>
-                <label class="color-#fff ff-calibri fs-13pt">Knock-Off</label>
-                <input type="time" id="off" value="16:00" class="br-5px fs-12pt"/>
+                <label class="color-#fff ff-calibri fs-13pt">Knock-Off Time</label>
+                <input type="time" id="off" value="16:00" class="br-5px fs-12pt" />
             </div>
-        </div>
-        <div>
-            <button>Start</button>
         </div>
     </div>
     <div class="bg-color-#4682B4 br-10px border-(5px,groove,orange) d-flex grid-template-column-(1fr,1fr,1fr) mt-4rem 
@@ -58,8 +56,33 @@
             </div>
         </div>
     </div>
+    <div>
+        <div id="breakControl" class="d-flex al-center mt-2rem gap-1rem">
+            <label class="ff-calibri color-#fff fs-12pt">Minutes</label>
+            <input type="number" class="br-4px bg-color-transparent color-white 
+            fs-12pt border-(1px,solid,orange)" id="breakDuration" />
+            <button id="break">Start Break</button>
+        </div>
+        <div id="breakTimer" class="d-none al-center color-orange ff-calibri">
+            <h4 class="center fs-20pt">Break Time Left!!!</h4>
+            <div class="d-flex al-center fs-children-100pt">
+                <span id="breakHr">00</span>
+                <span>:</span>
+                <span id="breakMin">00</span>
+                <span>:</span>
+                <span id="breakSec">00</span>
+            </div>
+        </div>
+    </div>
 </body>
 <script>
+    const getTimeFormatted = val => val < 10 ? `0${val}` : val;
+    let tracker = null;
+    let breakTracker = null;
+    const breakBtn = document.getElementById("break")
+    const breakControl = document.getElementById("breakControl")
+    const breakTimer = document.getElementById("breakTimer")
+
     // Encapsulating my objects in a closure
     const updateCurrentTime = () => {
         // STANDARD TIME
@@ -74,51 +97,110 @@
         const off_hours = document.getElementById("off_hr");
         const off_minutes = document.getElementById("off_min");
         const off_seconds = document.getElementById("off_sec");
+        // SETTING BUSINESS HOURS
+        const lunchHour = (document.getElementById('lunch').value).split(":")
+        const offHour = (document.getElementById('off').value).split(":")
 
         // Setting datatime for lunch + knockoff
         const dtObject = new Date();
-        const lunch = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), 12, 00, 00)
-        const knockOff = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), 16, 00, 00)
+        const lunch = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), lunchHour[0], lunchHour[1], 00)
+        const knockOff = new Date(dtObject.getFullYear(), dtObject.getMonth(), dtObject.getDate(), offHour[0], offHour[1], 00)
 
         return () => {
             const untillunch = new Date();
-            if(untillunch <= lunch){
+            if (untillunch <= lunch) {
                 // Till Lunch
                 untillunch.setHours(lunch.getHours() - untillunch.getHours());
                 untillunch.setMinutes(lunch.getMinutes() - untillunch.getMinutes());
                 untillunch.setSeconds(lunch.getSeconds() - untillunch.getSeconds());
-                
+
                 // SET LUNCH TIME
-                lunch_hours.innerText = untillunch.getHours() < 10 ? `0${untillunch.getHours()}` : untillunch.getHours();
-                lunch_minutes.innerText = untillunch.getMinutes() < 10 ? `0${untillunch.getMinutes()}` : untillunch.getMinutes();
-                lunch_seconds.innerText = untillunch.getSeconds() < 10 ? `0${untillunch.getSeconds()}` : untillunch.getSeconds();
-            } 
+                lunch_hours.innerText = getTimeFormatted(untillunch.getHours())
+                lunch_minutes.innerText = getTimeFormatted(untillunch.getMinutes())
+                lunch_seconds.innerText = getTimeFormatted(untillunch.getSeconds())
+            } else {
+                lunch_hours.innerText = `00`
+                lunch_minutes.innerText = `00`
+                lunch_seconds.innerText = `00`
+            }
 
             // Till Knock-Off
             const untilKnockOff = new Date();
-            if(untilKnockOff <= knockOff){
+            if (untilKnockOff <= knockOff) {
                 untilKnockOff.setHours(knockOff.getHours() - untilKnockOff.getHours());
                 untilKnockOff.setMinutes(knockOff.getMinutes() - untilKnockOff.getMinutes());
                 untilKnockOff.setSeconds(knockOff.getSeconds() - untilKnockOff.getSeconds());
                 // SET KNOCK-OFF VALUES
-                off_hours.innerText = untilKnockOff.getHours() < 10 ? `0${untilKnockOff.getHours()}` : untilKnockOff.getHours();
-                off_minutes.innerText = untilKnockOff.getMinutes() < 10 ? `0${untilKnockOff.getMinutes()}` : untilKnockOff.getMinutes();
-                off_seconds.innerText = untilKnockOff.getSeconds() < 10 ? `0${untilKnockOff.getSeconds()}` : untilKnockOff.getSeconds();
+                off_hours.innerText = getTimeFormatted(untilKnockOff.getHours())
+                off_minutes.innerText = getTimeFormatted(untilKnockOff.getMinutes())
+                off_seconds.innerText = getTimeFormatted(untilKnockOff.getSeconds())
+            } else {
+                off_hours.innerText = `00`
+                off_minutes.innerText = `00`
+                off_seconds.innerText = `00`
             }
 
             // SET STANDARD VALUES
             const dt = new Date();
-            hours.innerText = dt.getHours() < 10 ? `0${dt.getHours()}` : dt.getHours();
-            minutes.innerText = dt.getMinutes() < 10 ? `0${dt.getMinutes()}` : dt.getMinutes();
-            seconds.innerText = dt.getSeconds() < 10 ? `0${dt.getSeconds()}` : dt.getSeconds();
+            hours.innerText = getTimeFormatted(dt.getHours())
+            minutes.innerText = getTimeFormatted(dt.getMinutes())
+            seconds.innerText = getTimeFormatted(dt.getSeconds())
         }
     }
 
-    // Instantiating my time-update function
-    const currentTime = updateCurrentTime();
+    // STARTING THE TIME TRACKER
+    const startTracker = () => {
+        if (tracker) clearInterval(tracker)
 
-    // Updating my time after every second
-    setInterval(() => currentTime(), 1000)
+        // Instantiating my time-update function
+        const currentTime = updateCurrentTime();
+
+        // Updating my time after every second
+        tracker = setInterval(() => currentTime(), 1000)
+    }
+
+    const breakTime = () => {
+        const breakHours = document.getElementById("breakHr");
+        const breakMinutes = document.getElementById("breakMin");
+        const breakSeconds = document.getElementById("breakSec");
+        const breakDuration = document.getElementById("breakDuration")
+        const breakTimeLeft = new Date();
+        breakTimeLeft.setSeconds(breakTimeLeft.getSeconds() + (parseInt(breakDuration.value) * 60))
+
+        return () => {
+            const timeUpdate = new Date();
+
+            if (timeUpdate <= breakTimeLeft) {
+                timeUpdate.setHours(breakTimeLeft.getHours() - timeUpdate.getHours())
+                timeUpdate.setMinutes(breakTimeLeft.getMinutes() - timeUpdate.getMinutes())
+                timeUpdate.setSeconds(breakTimeLeft.getSeconds() - timeUpdate.getSeconds())
+
+                breakHours.innerText = getTimeFormatted(timeUpdate.getHours())
+                breakMinutes.innerText = getTimeFormatted(timeUpdate.getMinutes())
+                breakSeconds.innerText = getTimeFormatted(timeUpdate.getSeconds())
+            } else {
+                alert("Hey, your break time is finished!\n\nTime to get back to work!!!")
+                if (breakTracker) clearInterval(breakTracker)
+                breakHours.innerText = `00`
+                breakMinutes.innerText = `00`
+                breakSeconds.innerText = `00`
+                breakControl.style.display = 'flex'
+                breakTimer.style.display = 'none'
+                breakDuration.value = null;
+            }
+        }
+    }
+
+    breakBtn.addEventListener("click", e => {
+        breakControl.style.display = 'none'
+        breakTimer.style.display = 'block'
+        const takingAbreak = breakTime();
+        breakTracker = setInterval(() => takingAbreak(), 1000);
+    })
+
+    document.getElementById('lunch').addEventListener('change', e => startTracker())
+    document.getElementById('off').addEventListener('change', e => startTracker())
+    window.addEventListener('load', e => startTracker())
 </script>
 
 </html>
